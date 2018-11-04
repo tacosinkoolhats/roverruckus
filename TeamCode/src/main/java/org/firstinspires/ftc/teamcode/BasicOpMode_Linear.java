@@ -27,11 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -51,13 +51,15 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-@Disabled
+//@Disabled
 public class BasicOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor liftDrive = null;
+    int liftDrivePossition = 0;
 
     @Override
     public void runOpMode() {
@@ -69,11 +71,14 @@ public class BasicOpMode_Linear extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-
+        liftDrive = hardwareMap.get(DcMotor.class, "LinearLift");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD );
+        liftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        liftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -93,6 +98,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn  =  gamepad1.right_stick_x;
+            boolean Abutton  =  gamepad1.a;
+            boolean Ybutton =  gamepad1.y;
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
@@ -104,10 +111,30 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
+            if (Abutton == true) {
+                if (liftDrive.getCurrentPosition() < 35000) {
+                    liftDrive.setPower(.8);
+                } else {
+                    liftDrive.setPower(0);
+                }
+            } else {
+                liftDrive.setPower(0);
+            }
 
+            if (Ybutton == true) {
+                liftDrive.setPower(-.8);
+            } else {
+                liftDrive.setPower(0);
+            }
+            liftDrivePossition = liftDrive.getCurrentPosition();
             // Show the elapsed game time and wheel power.
+            telemetry.addData("left_stick_y", gamepad1.left_stick_y);
+            telemetry.addData("left_stick_x", gamepad1.left_stick_x);
+            telemetry.addData("right_stick_x", gamepad1.left_stick_y);
+            telemetry.addData("right_stick_x", gamepad1.left_stick_x);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("LiftDrive", "Lift at %7d", liftDrivePossition);
             telemetry.update();
         }
     }
