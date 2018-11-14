@@ -120,9 +120,12 @@ public class BasicOpMode_Linear extends LinearOpMode {
             } else {
                 liftDrive.setPower(0);
             }
-
             if (Ybutton == true) {
-                liftDrive.setPower(-.8);
+                if (liftDrive.getCurrentPosition() > 0) {
+                    liftDrive.setPower(-.8);
+                } else {
+                    liftDrive.setPower(0);
+                }
             } else {
                 liftDrive.setPower(0);
             }
