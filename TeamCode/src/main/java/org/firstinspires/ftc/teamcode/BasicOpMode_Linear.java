@@ -123,6 +123,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             if (Ybutton == true) {
                 if (liftDrive.getCurrentPosition() > 0) {
                     liftDrive.setPower(-.8);
+                } else if (gamepad1.x) {
+                    liftDrive.setPower(-.8);
                 } else {
                     liftDrive.setPower(0);
                 }
