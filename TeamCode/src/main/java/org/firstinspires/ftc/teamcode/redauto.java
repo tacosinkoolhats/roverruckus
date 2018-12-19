@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * This file illustrates the concept of driving up to a line and then stopping.
@@ -63,6 +64,7 @@ public class redauto extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor liftDrive = null;
+    private Servo DepotServo = null;
     int liftDrivePossition = 0;
 
     @Override
@@ -74,6 +76,7 @@ public class redauto extends LinearOpMode {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         liftDrive = hardwareMap.get(DcMotor.class, "LinearLift");
+        DepotServo = hardwareMap.get(Servo.class, "depotservo");
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD );
@@ -87,7 +90,7 @@ public class redauto extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-
+        DepotServo.setPosition(0);
         // Wait for the game to start (driver presses PLAY)
         // Abort this loop is started or stopped.
         while (!(isStarted() || isStopRequested())) {
@@ -98,18 +101,48 @@ public class redauto extends LinearOpMode {
         }
 
         // Start the robot moving forward, and then begin looking for a white line.
-        liftDrive.setTargetPosition(35000);
+        liftDrive.setTargetPosition(25000);
         liftDrive.setPower(.8);
-
-        // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive()&& liftDrive.isBusy()) {
-
-            // Display the light level while we are looking for the line
+        while (liftDrive.isBusy() && opModeIsActive()) {
+            idle();
             telemetry.addData("Lowering Robot", liftDrive.getCurrentPosition());
             telemetry.update();
         }
+        liftDrive.setPower(0);
+        leftDrive.setTargetPosition(-2100);
+        leftDrive.setPower(.5);
+        rightDrive.setTargetPosition(2100);
+        rightDrive.setPower(.5);
+        while (leftDrive.isBusy() && opModeIsActive())
+            idle();
+        while (rightDrive.isBusy() && opModeIsActive())
+            idle();
 
         // Stop all motors
-       liftDrive.setPower(0);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftDrive.setTargetPosition(4200);
+        leftDrive.setPower(.5);
+        rightDrive.setTargetPosition(4200);
+        rightDrive.setPower(.5);
+        while (leftDrive.isBusy() && opModeIsActive())
+            idle();
+        while (rightDrive.isBusy() && opModeIsActive())
+            idle();
+
+        // Stop all motors
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+
+        DepotServo.setPosition(0.6);
+        sleep(2000);
+        DepotServo.setPosition(0);
+        sleep(2000);
     }
 }

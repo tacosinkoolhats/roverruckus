@@ -79,6 +79,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         liftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         liftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -112,7 +114,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             if (Abutton == true) {
-                if (liftDrive.getCurrentPosition() < 35000) {
+                if (liftDrive.getCurrentPosition() < 0 ) {
                     liftDrive.setPower(.8);
                 } else {
                     liftDrive.setPower(0);
@@ -121,7 +123,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 liftDrive.setPower(0);
             }
             if (Ybutton == true) {
-                if (liftDrive.getCurrentPosition() > 0) {
+                if (liftDrive.getCurrentPosition() > -25000) {
                     liftDrive.setPower(-.8);
                 } else if (gamepad1.x) {
                     liftDrive.setPower(-.8);
