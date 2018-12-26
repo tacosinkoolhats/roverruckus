@@ -32,9 +32,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 /**
@@ -59,6 +61,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor liftDrive = null;
+    private CRServo sweeperservo = null;
     int liftDrivePossition = 0;
 
     @Override
@@ -72,7 +75,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         liftDrive = hardwareMap.get(DcMotor.class, "LinearLift");
-        // Most robots need the motor on one side to be reversed to drive forward
+        sweeperservo = hardwareMap.get(CRServo.class, "sweeperservo");
+// Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD );
@@ -100,6 +104,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn  =  gamepad1.right_stick_x;
+            boolean RB = gamepad1.right_bumper;
+            boolean LB = gamepad1.left_bumper;
             boolean Abutton  =  gamepad1.a;
             boolean Ybutton =  gamepad1.y;
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
@@ -131,7 +137,24 @@ public class BasicOpMode_Linear extends LinearOpMode {
                     liftDrive.setPower(0);
                 }
             } else {
-                liftDrive.setPower(0);
+                if (Abutton != true){
+                    liftDrive.setPower(0);
+                }
+            }
+            //Arm
+
+            if (RB == true) {
+                sweeperservo.setPower(1);
+            } else {
+                sweeperservo.setPower(0);
+            }
+
+            if (LB == true) {
+                sweeperservo.setPower(-1);
+            } else {
+                if (RB != true) {
+                    sweeperservo.setPower(0);
+                }
             }
             liftDrivePossition = liftDrive.getCurrentPosition();
             // Show the elapsed game time and wheel power.
