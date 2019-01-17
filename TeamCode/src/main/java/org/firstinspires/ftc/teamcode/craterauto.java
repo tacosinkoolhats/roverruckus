@@ -59,11 +59,12 @@ public class craterauto extends LinearOpMode {
 
     /* Declare OpMode members. */
     static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
-    static final double     APPROACH_SPEED  = 0.5;
+    static final double     APPROACH_SPEED  =1;
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor liftDrive = null;
     private Servo DepotServo = null;
+    private Servo colorservo = null;
     int liftDrivePossition = 0;
 
     @Override
@@ -76,9 +77,13 @@ public class craterauto extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         liftDrive = hardwareMap.get(DcMotor.class, "LinearLift");
         DepotServo = hardwareMap.get(Servo.class, "depotservo");
+        colorservo = hardwareMap.get(Servo.class, "colorservo");
+
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD );
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -90,6 +95,7 @@ public class craterauto extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
         DepotServo.setPosition(0);
+        colorservo.setPosition(1);
         // Wait for the game to start (driver presses PLAY)
         // Abort this loop is started or stopped.
         while (!(isStarted() || isStopRequested())) {
@@ -100,18 +106,18 @@ public class craterauto extends LinearOpMode {
         }
 
         // Start the robot moving forward, and then begin looking for a white line.
-        liftDrive.setTargetPosition(25000);
-        liftDrive.setPower(.8);
+        liftDrive.setTargetPosition(35000);
+        liftDrive.setPower(1);
         while (liftDrive.isBusy() && opModeIsActive()) {
             idle();
             telemetry.addData("Lowering Robot", liftDrive.getCurrentPosition());
             telemetry.update();
         }
         liftDrive.setPower(0);
-        leftDrive.setTargetPosition(-1900);
-        leftDrive.setPower(.5);
-        rightDrive.setTargetPosition(1900);
-        rightDrive.setPower(.5);
+        leftDrive.setTargetPosition(-1600);
+        leftDrive.setPower(0.8);
+        rightDrive.setTargetPosition(1600);
+        rightDrive.setPower(0.8);
         while (leftDrive.isBusy() && opModeIsActive())
             idle();
         while (rightDrive.isBusy() && opModeIsActive())
@@ -121,19 +127,40 @@ public class craterauto extends LinearOpMode {
         leftDrive.setPower(0);
         rightDrive.setPower(0);
 
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftDrive.setTargetPosition(3000);
-        leftDrive.setPower(.4);
-        rightDrive.setTargetPosition(3000);
-        rightDrive.setPower(.4);
+        leftDrive.setTargetPosition(1820);
+        leftDrive.setPower(1);
+        rightDrive.setTargetPosition(1820);
+        rightDrive.setPower(1);
         while (leftDrive.isBusy() && opModeIsActive())
             idle();
         while (rightDrive.isBusy() && opModeIsActive())
             idle();
+
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftDrive.setTargetPosition(-1550);
+        leftDrive.setPower(0.5);
+        rightDrive.setTargetPosition(1550);
+        rightDrive.setPower(0.5);
+        while (leftDrive.isBusy() && opModeIsActive())
+            idle();
+        while (rightDrive.isBusy() && opModeIsActive())
+            idle();
+
+        colorservo.setPosition(0.17);
+        sleep(2000);
 
         // Stop all motors
         leftDrive.setPower(0);

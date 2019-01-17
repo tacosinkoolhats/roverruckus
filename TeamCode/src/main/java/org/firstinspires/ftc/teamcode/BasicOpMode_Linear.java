@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -62,6 +63,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
     private DcMotor rightDrive = null;
     private DcMotor liftDrive = null;
     private CRServo sweeperservo = null;
+    private ColorSensor colorsensor = null;
     int liftDrivePossition = 0;
 
     @Override
@@ -76,6 +78,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         liftDrive = hardwareMap.get(DcMotor.class, "LinearLift");
         sweeperservo = hardwareMap.get(CRServo.class, "sweeperservo");
+        colorsensor = hardwareMap.get(ColorSensor.class,"colorsensor");
 // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -121,7 +124,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             rightDrive.setPower(rightPower);
             if (Abutton == true) {
                 if (liftDrive.getCurrentPosition() < 0 ) {
-                    liftDrive.setPower(.8);
+                    liftDrive.setPower(1);
                 } else {
                     liftDrive.setPower(0);
                 }
@@ -129,10 +132,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 liftDrive.setPower(0);
             }
             if (Ybutton == true) {
-                if (liftDrive.getCurrentPosition() > -25000) {
-                    liftDrive.setPower(-.8);
+                if (liftDrive.getCurrentPosition() > -35000) {
+                    liftDrive.setPower(-1);
                 } else if (gamepad1.x) {
-                    liftDrive.setPower(-.8);
+                    liftDrive.setPower(-1);
                 } else {
                     liftDrive.setPower(0);
                 }
@@ -165,6 +168,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("LiftDrive", "Lift at %7d", liftDrivePossition);
+            telemetry.addData("Alpha", colorsensor.alpha());
+            telemetry.addData("Red", colorsensor.red());
             telemetry.update();
         }
     }

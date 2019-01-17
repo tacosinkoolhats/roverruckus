@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -56,7 +55,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 
 @Autonomous(name="redauto", group="auto")
-public class redauto extends LinearOpMode {
+public class depotauto extends LinearOpMode {
 
     /* Declare OpMode members. */
     static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
@@ -162,38 +161,6 @@ public class redauto extends LinearOpMode {
         //while (rightDrive.isBusy() && opModeIsActive())
         //    idle();
 
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        DepotServo.setPosition(0);
-        sleep(2000);
-
-        leftDrive.setTargetPosition(1800);
-        leftDrive.setPower(0.6);
-        rightDrive.setTargetPosition(-1800);
-        rightDrive.setPower(0.6);
-        while (leftDrive.isBusy() && rightDrive.isBusy() && opModeIsActive())
-            idle();
-        //while (rightDrive.isBusy() && opModeIsActive())
-        //    idle();
-
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftDrive.setTargetPosition(6500);
-        leftDrive.setPower(1);
-        rightDrive.setTargetPosition(6500);
-        rightDrive.setPower(1);
-        while (leftDrive.isBusy() && rightDrive.isBusy() && opModeIsActive())
-            idle();
         //while (rightDrive.isBusy() && opModeIsActive())
         //    idle();
 

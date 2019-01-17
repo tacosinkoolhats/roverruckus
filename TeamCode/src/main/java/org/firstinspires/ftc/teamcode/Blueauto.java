@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -55,8 +54,8 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="redauto", group="auto")
-public class redauto extends LinearOpMode {
+@Autonomous(name="Blueauto", group="auto")
+public class Blueauto extends LinearOpMode {
 
     /* Declare OpMode members. */
     static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
@@ -172,9 +171,9 @@ public class redauto extends LinearOpMode {
         DepotServo.setPosition(0);
         sleep(2000);
 
-        leftDrive.setTargetPosition(1800);
+        leftDrive.setTargetPosition(-2000);
         leftDrive.setPower(0.6);
-        rightDrive.setTargetPosition(-1800);
+        rightDrive.setTargetPosition(2000);
         rightDrive.setPower(0.6);
         while (leftDrive.isBusy() && rightDrive.isBusy() && opModeIsActive())
             idle();
